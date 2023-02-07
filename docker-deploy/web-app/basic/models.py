@@ -1,7 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator
+from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 # Create your models here.
+
+
+def validate_datetime(datetime):
+    if datetime < timezone.now():
+        raise ValidationError("Datetime cannot be in the past")
 
 
 class Driver(models.Model):
@@ -12,7 +20,8 @@ class Driver(models.Model):
     plate_nubmer = models.CharField(verbose_name="Plate number", max_length=32)
     veh_type = models.SmallIntegerField(verbose_name="Vehicle type", default=1,
                                         choices=[(1, "Hatchback"), (2, "MPV"), (3, "Pickup"), (4, "Sedan"), (5, "Sports"), (6, "SUV"), (7, "other")])
-    capacity = models.PositiveSmallIntegerField(verbose_name="Capacity")
+    capacity = models.PositiveSmallIntegerField(
+        verbose_name="Capacity", validators=[MinValueValidator(1)])
     manufacturer = models.CharField(
         verbose_name="Manufacturer", max_length=32, blank=True)
     register_time = models.DateTimeField(
@@ -32,8 +41,9 @@ class Ride(models.Model):
     start_point = models.CharField(verbose_name="Starting", max_length=256)
     destination = models.CharField(verbose_name="Destination", max_length=256)
     req_arrival_time = models.DateTimeField(
-        verbose_name="Required Arrival Time", help_text="eg. 1970-01-01 00:00")
-    passengers = models.PositiveSmallIntegerField(verbose_name="Passengers")
+        verbose_name="Required Arrival Time", validators=[validate_datetime])
+    passengers = models.PositiveSmallIntegerField(
+        verbose_name="Passengers", validators=[MinValueValidator(1)])
     veh_type = models.SmallIntegerField(verbose_name="Vehicle type", default=0,
                                         choices=[(0, "Any"), (1, "Hatchback"), (2, "MPV"), (3, "Pickup"), (4, "Sedan"), (5, "Sports"), (6, "SUV"), (7, "other")])
     is_shared = models.SmallIntegerField(
@@ -48,4 +58,4 @@ class Sharer(models.Model):
     ride = models.ForeignKey(
         to=Ride, on_delete=models.CASCADE, verbose_name=" ")
     party_passengers = models.PositiveSmallIntegerField(
-        verbose_name="Sharer passengers")
+        verbose_name="Sharer passengers", validators=[MinValueValidator(1)])

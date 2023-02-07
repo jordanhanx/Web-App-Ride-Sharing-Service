@@ -229,8 +229,8 @@ def driverRideView(request):
         return HttpResponseRedirect(reverse("basic:driver_register"))
 
     uncomplete_ride_set = driver.ride_set.filter(status=2)
-    open_ride_set = Ride.objects.exclude(owner=request.user, pk__in=getJoinedShareRideIDs(request))\
-        .filter(status=1, passengers__lte=driver.capacity, veh_type__in=[driver.veh_type, 0])
+    open_ride_set = Ride.objects.exclude(owner=request.user).exclude(pk__in=getJoinedShareRideIDs(request))\
+        .filter(status=1).filter(passengers__lte=driver.capacity).filter(veh_type__in=[driver.veh_type, 0])
 
     context = {"uncomplete_ride_set": uncomplete_ride_set,
                "open_ride_set": open_ride_set}
