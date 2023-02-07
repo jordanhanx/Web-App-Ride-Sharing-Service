@@ -1,0 +1,6 @@
+SECURITY
+    Some information of non-currently logged-in accounts can be modified by directly entering a specific URL with
+    other user's id. This is because the Django built-in UpdateView class ask to use url to pass primary key value.
+    
+    Those view functions I defined do not have this problem because I wrap all value into POST form. But they still
+    can be intentionally modified by the browser's inspect tool.
