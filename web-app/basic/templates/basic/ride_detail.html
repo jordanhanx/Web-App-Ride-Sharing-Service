@@ -1,0 +1,180 @@
+{% extends 'basic/navbar.html' %}
+{% block content %}
+<div class="container">
+    <div class="offset-3 col-6 text-center">
+        <br class="my-4">
+        <h3 class="mb-3">Ride order</h3>
+        <div class="row g-3">
+
+            <div class="col-sm-4">
+                <label class="form-label">Created time</label>
+                <input type="text" class="form-control text-center" placeholder="{{ ride.created_time }}" disabled>
+            </div>
+            <div class="col-sm-4">
+                <label class="form-label">Owner</label>
+                <input type="text" class="form-control text-center" placeholder="{{ ride.owner.username }}" disabled>
+            </div>
+            <div class="col-sm-2">
+                <label class="form-label">First name</label>
+                <input type="text" class="form-control text-center" placeholder="{{ ride.owner.first_name }}" disabled>
+            </div>
+            <div class="col-sm-2">
+                <label class="form-label">Last name</label>
+                <input type="text" class="form-control text-center" placeholder="{{ ride.owner.last_name }}" disabled>
+            </div>
+
+            <div class="col-sm-6">
+                <label class="form-label">Starting</label>
+                <input type="text" class="form-control text-center" placeholder="{{ ride.start_point }}" disabled>
+            </div>
+            <div class="col-sm-6">
+                <label class="form-label">Destination</label>
+                <input type="text" class="form-control text-center" placeholder="{{ ride.destination }}" disabled>
+            </div>
+
+            <div class="col-sm-6">
+                <label class="form-label">Required Arrival Time</label>
+                <input type="text" class="form-control text-center" placeholder="{{ ride.req_arrival_time }}" disabled>
+            </div>
+            <div class="col-sm-2">
+                <label class="form-label">Passengers</label>
+                <input type="text" class="form-control text-center" placeholder="{{ ride.passengers }}" disabled>
+            </div>
+            <div class="col-sm-2">
+                <label class="form-label">is shared</label>
+                <input type="text" class="form-control text-center" placeholder="{{ ride.get_is_shared_display }}"
+                    disabled>
+            </div>
+            <div class="col-sm-2">
+                <label class="form-label">Status</label>
+                <input type="text" class="form-control text-center" placeholder="{{ ride.get_status_display }}"
+                    disabled>
+            </div>
+            <div class="col-12">
+                <label class="form-label">Special requests</label>
+                <input type="text" class="form-control" placeholder="{{ ride.special_request }}" disabled>
+            </div>
+            <br><br>
+            {% if request.user == ride.owner and ride.status == 1 %}
+            <div class="text-center">
+                <a type="button" class="w-40 btn btn-primary" href="{% url 'basic:ride_update' ride.id%}">Edit</a>
+            </div>
+            {% endif %}
+        </div>
+        <hr class="my-4">
+
+        {% if ride.driver %}
+        <h4 class=" mb-3">Driver info</h4>
+        {% else %}
+        <h4 class="mb-3">Driver info<span class="text-muted"> (no data) </span></h4>
+        {% endif %}
+        <div class="row g-3">
+
+            <div class="col-sm-4">
+                <label class="form-label">Driver</label>
+                {% if ride.driver %}
+                <input type="text" class="form-control text-center" placeholder="{{ ride.driver.user.username }}"
+                    disabled>
+                {% else %}
+                <input type="text" class="form-control" placeholder="" disabled>
+                {% endif%}
+            </div>
+            <div class="col-sm-2">
+                <label class="form-label">First name</label>
+                {% if ride.driver %}
+                <input type="text" class="form-control text-center" placeholder="{{ ride.driver.first_name }}" disabled>
+                {% else %}
+                <input type="text" class="form-control" placeholder="" disabled>
+                {% endif%}
+            </div>
+            <div class="col-sm-2">
+                <label class="form-label">Last name</label>
+                {% if ride.driver %}
+                <input type="text" class="form-control text-center" placeholder="{{ ride.driver.last_name}}" disabled>
+                {% else %}
+                <input type="text" class="form-control" placeholder="" disabled>
+                {% endif%}
+            </div>
+            <div class="col-sm-4">
+                <label class="form-label">Registeration</label>
+                {% if ride.driver %}
+                <input type="text" class="form-control text-center" value="{{ ride.driver.register_time }}" disabled>
+                {% else %}
+                <input type="text" class="form-control" placeholder="" disabled>
+                {% endif%}
+            </div>
+
+            <div class="col-sm-4">
+                <label class="form-label">Plate number</label>
+                {% if ride.driver %}
+                <input type="text" class="form-control text-center" placeholder="{{ ride.driver.plate_nubmer }}"
+                    disabled>
+                {% else %}
+                <input type="text" class="form-control" placeholder="" disabled>
+                {% endif%}
+            </div>
+            <div class="col-sm-2">
+                <label class="form-label">Vehicle type</label>
+                {% if ride.driver %}
+                <input type="text" class="form-control text-center" placeholder="{{ ride.driver.get_veh_type_display }}"
+                    disabled>
+                {% else %}
+                <input type="text" class="form-control" placeholder="" disabled>
+                {% endif%}
+            </div>
+            <div class="col-sm-2">
+                <label class="form-label">Capacity</label>
+                {% if ride.driver %}
+                <input type="text" class="form-control text-center" placeholder="{{ ride.driver.capacity }}" disabled>
+                {% else %}
+                <input type="text" class="form-control" placeholder="" disabled>
+                {% endif%}
+            </div>
+            <div class="col-sm-4">
+                <label class="form-label">Manufacturer</label>
+                {% if ride.driver %}
+                <input type="text" class="form-control text-center" placeholder="{{ ride.driver.manufacturer }}"
+                    disabled>
+                {% else %}
+                <input type="text" class="form-control" placeholder="" disabled>
+                {% endif%}
+            </div>
+
+            <div class="col-12">
+                <label class="form-label">Infomation</label>
+                {% if ride.driver %}
+                <input type="text" class="form-control" placeholder="{{ ride.driver.vehicle_info }}" disabled>
+                {% else %}
+                <input type="text" class="form-control" placeholder="" disabled>
+                {% endif%}
+            </div>
+        </div>
+        <hr class="my-4">
+
+        {% if ride.is_shared == 2 %}
+        {% if ride.sharer_set.all %}
+        <h4 class="mb-3">Share member</h4>
+        {% else %}
+        <h4 class="mb-3">Share member<span class="text-muted"> (no data) </span></h4>
+        {% endif %}
+        <div class="row g-3">
+            {% for sharer in ride.sharer_set.all %}
+            <div class="col-sm-4">
+                <label class="form-label">Sharer</label>
+                <input type="text" class="form-control text-center" placeholder="{{ sharer.user.username }}" disabled>
+            </div>
+            <div class="col-sm-2">
+                <label class="form-label">Party</label>
+                <input type="text" class="form-control text-center" placeholder="{{ sharer.party_passengers }}"
+                    disabled>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <br class="my-4">
+    <br class="my-4">
+    <br class="my-4">
+</div>
+</div>
+{% endblock %}

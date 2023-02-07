@@ -1,0 +1,124 @@
+{% extends 'basic/navbar.html' %}
+{% block content %}
+<div class="container">
+    <div class="offset-4 col-4 mx-auto">
+        <br class="my-4">
+        <br class="my-4">
+        <h4 class="mb-3">User profile</h4>
+        <div class="row g-3">
+
+            <div class="col-12">
+                <label for="username" class="form-label">Username</label>
+                <div class="input-group has-validation">
+                    <input type="text" class="form-control" id="username" placeholder="{{ user.username }}" disabled>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <label for="firstName" class="form-label">First name</label>
+                <input type="text" class="form-control" id="firstName" placeholder="{{ user.first_name }}" disabled>
+            </div>
+
+            <div class="col-sm-6">
+                <label for="firstName" class="form-label">Last name</label>
+                <input type="text" class="form-control" id="firstName" placeholder="{{ user.last_name }}" disabled>
+            </div>
+
+            <div class="col-12">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="{{ user.email }}" disabled>
+            </div>
+            <br><br>
+            <div class="col-6 text-center">
+                <a type="button" class="w-80 btn btn-primary" href="{% url 'basic:profile_update' user.id %}">Update
+                    profile</a>
+            </div>
+            <div class="col-6 text-center">
+                <a type="button" class="w-80 btn btn-danger" href="{% url 'basic:change_password'%}">Change Password</a>
+            </div>
+        </div>
+        <hr class="my-4">
+
+        {% if driver %}
+        <h4 class="mb-3">Vehicle profile</h4>
+        {% else %}
+        <h4 class="mb-3">Vehicle profile<span class="text-muted"> (no data) </span></h4>
+        {% endif %}
+        <div class="row g-3">
+
+            <div class="col-sm-6">
+                <label for="firstName" class="form-label">Plate number</label>
+                {% if driver %}
+                <input type="text" class="form-control" id="firstName" placeholder="{{ driver.plate_nubmer }}" disabled>
+                {% else %}
+                <input type="text" class="form-control" id="firstName" placeholder="" disabled>
+                {% endif%}
+            </div>
+
+            <div class="col-sm-6">
+                <label for="firstName" class="form-label">Manufacturer</label>
+                {% if driver %}
+                <input type="text" class="form-control" id="firstName" placeholder="{{ driver.manufacturer }}" disabled>
+                {% else %}
+                <input type="text" class="form-control" id="firstName" placeholder="" disabled>
+                {% endif%}
+            </div>
+
+            <div class="col-sm-3">
+                <label for="firstName" class="form-label">Vehicle type</label>
+                {% if driver %}
+                <input type="text" class="form-control" id="firstName" placeholder="{{ driver.get_veh_type_display }}"
+                    disabled>
+                {% else %}
+                <input type="text" class="form-control" id="firstName" placeholder="" disabled>
+                {% endif%}
+            </div>
+
+            <div class="col-sm-3">
+                <label for="firstName" class="form-label">Capacity</label>
+                {% if driver %}
+                <input type="text" class="form-control" id="firstName" placeholder="{{ driver.capacity }}" disabled>
+                {% else %}
+                <input type="text" class="form-control" id="firstName" placeholder="" disabled>
+                {% endif%}
+            </div>
+
+            <div class="col-sm-6">
+                <label for="firstName" class="form-label">Registeration</label>
+                {% if driver %}
+                <input type="text" class="form-control" id="firstName" value="{{ driver.register_time }}" disabled>
+                {% else %}
+                <input type="text" class="form-control" id="firstName" placeholder="" disabled>
+                {% endif%}
+            </div>
+
+            <div class="col-12">
+                <label for="username" class="form-label">Infomation</label>
+                <div class="input-group has-validation">
+                    <input type="text" class="form-control" id="username" placeholder="{{ driver.vehicle_info }}"
+                        disabled>
+                </div>
+            </div>
+            <br><br>
+            {% if driver %}
+            <div class="col-6 text-center">
+                <a type="button" class="w-80 btn btn-primary" href="{% url 'basic:driver_update' driver.id%}">Update</a>
+            </div>
+            <div class="col-6 text-center">
+                <form method="POST" action="{% url 'basic:driver_delete'%}">
+                    {% csrf_token %}
+                    <button type="submit" class="w-80 btn btn-danger">Delete</button>
+                </form>
+            </div>
+            {% else %}
+            <div class="offset-3 col-6 text-center">
+                <a type="button" class="w-40 btn btn-primary" href="{% url 'basic:driver_register'%}">Register</a>
+            </div>
+            {% endif %}
+        </div>
+        <br class="my-4">
+        <br class="my-4">
+        <br class="my-4">
+    </div>
+</div>
+{% endblock %}

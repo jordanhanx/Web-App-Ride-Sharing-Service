@@ -1,0 +1,156 @@
+{% extends 'basic/navbar.html' %}
+{% block content %}
+
+
+{% if joined_uncomplete_share_ride_set %}
+<br>
+<div class="container">
+    <div class="text-center">
+        <h4>Your joined share rides</h4>
+    </div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col-1">#</th>
+                <th scope="col-1">Start point</th>
+                <th scope="col-1">Destination</th>
+                <th scope="col-1">Required arrival time</th>
+                <th scope="col-1">Passengers</th>
+                <th scope="col-1">Vehicle type</th>
+                <th scope="col-1">is Shared</th>
+                <th scope="col-1">Status</th>
+                <th scope="col-1">Detail</th>
+                <th scope="col-1">Exit</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ride in joined_uncomplete_share_ride_set %}
+            <tr>
+                <th scope="row">{{ ride.id }}</th>
+                <td>{{ ride.start_point }}</td>
+                <td>{{ ride.destination }}</td>
+                <td>{{ ride.req_arrival_time }}</td>
+                <td>{{ ride.passengers }}</td>
+                <td>{{ ride.get_veh_type_display }}</td>
+                <td>{{ ride.get_is_shared_display }}</td>
+                <td>{{ ride.get_status_display }}</td>
+                <td>
+                    <a type="button" class="btn btn-outline-primary"
+                        href="{% url 'basic:ride_detail' ride.id%}">Detail</a>
+                </td>
+                <td>
+                    <form method="POST" action="{% url 'basic:exit_ride'%}">
+                        {% csrf_token %}
+                        {% if ride.status == 1 %}
+                        <button type="submit" name="ride_id" value={{ ride.id }}
+                            class="btn btn-outline-danger">Exit</button>
+                        {% else %}
+                        <button type="button" class="btn btn-outline-danger" disabled>Exit</button>
+                        {% endif %}
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+<br>
+<div class="container">
+    <div class="text-center">
+        <h4>All open shared rides</h4>
+    </div>
+    <form method="get">
+        <div class="row row-cols-6 my-4">
+            <div class="col">
+                <label>Destination</label>
+            </div>
+            <div class="col">
+                <label>Arrival time after</label>
+            </div>
+            <div class="col">
+                <label>Arrival time before</label>
+            </div>
+            <div class="col">
+                <label>Passengers</label>
+            </div>
+            <div class="col">
+                <label>Vehicle Type</label>
+            </div>
+            <div class="col">
+                <label> </label>
+            </div>
+
+            <div class="col">
+                <input type="text" name="destination" class="form-control" />
+            </div>
+            <div class="col">
+                <input type="datetime-local" name="filter_time_gt" class="form-control" />
+            </div>
+            <div class="col">
+                <input type="datetime-local" name="filter_time_lt" class="form-control" />
+            </div>
+            <div class="col">
+                <input type="number" min="1" name="fiter_passengers" class="form-control" />
+            </div>
+            <div class="col">
+                <input type="text" name="filter_type" list="cars" class="form-control" />
+                <datalist id="cars">
+                    <option>Any</option>
+                    <option>Hatchback</option>
+                    <option>MPV</option>
+                    <option>Pickup</option>
+                    <option>Sedan</option>
+                    <option>Sports</option>
+                    <option>SUV</option>
+                    <option>other</option>
+                </datalist>
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-outline-success" name="search" , value="True">Search</button>
+                <button type="submit" class="btn btn-outline-secondary" name="reset" , value="True">Reset</button>
+            </div>
+        </div>
+    </form>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col-1">#</th>
+                <th scope="col-1">Start point</th>
+                <th scope="col-1">Destination</th>
+                <th scope="col-1">Required arrival time</th>
+                <th scope="col-1">Passengers</th>
+                <th scope="col-1">Vehicle type</th>
+                <th scope="col-1">is Shared</th>
+                <th scope="col-1">Status</th>
+                <th scope="col-1">Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ride in open_share_ride_set %}
+            <tr>
+                <th scope="row">{{ ride.id }}</th>
+                <td>{{ ride.start_point }}</td>
+                <td>{{ ride.destination }}</td>
+                <td>{{ ride.req_arrival_time }}</td>
+                <td>{{ ride.passengers }}</td>
+                <td>{{ ride.get_veh_type_display }}</td>
+                <td>{{ ride.get_is_shared_display }}</td>
+                <td>{{ ride.get_status_display }}</td>
+                <td>
+                    <form method="POST" action="{% url 'basic:join_ride'%}">
+                        {% csrf_token %}
+                        <button type="submit" name="ride_id" value="{{ ride.id }}"
+                            class="btn btn-outline-primary">Join</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock %}

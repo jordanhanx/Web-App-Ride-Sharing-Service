@@ -1,0 +1,56 @@
+{% extends 'basic/navbar.html' %}
+{% block content %}
+<br>
+<div class="container">
+    <a type="button" class="btn btn-primary" href="{% url 'basic:ride_add'%}">New Ride</a>
+</div>
+<br>
+<div class="container">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col-1">#</th>
+                <th scope="col-1">Starting</th>
+                <th scope="col-1">Destination</th>
+                <th scope="col-1">Required arrival time</th>
+                <th scope="col-1">Passengers</th>
+                <th scope="col-1">Vehicle type</th>
+                <th scope="col-1">is Shared</th>
+                <th scope="col-1">Status</th>
+                <th scope="col-1">Detail</th>
+                <th scope="col-1">Cancel</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ride in ride_set %}
+            <tr>
+                <th scope="row">{{ ride.id }}</th>
+                <td>{{ ride.start_point }}</td>
+                <td>{{ ride.destination }}</td>
+                <td>{{ ride.req_arrival_time }}</td>
+                <td>{{ ride.passengers }}</td>
+                <td>{{ ride.get_veh_type_display }}</td>
+                <td>{{ ride.get_is_shared_display }}</td>
+                <td>{{ ride.get_status_display }}</td>
+                <td>
+                    <a type="button" class="btn btn-outline-primary"
+                        href="{% url 'basic:ride_detail' ride.id%}">Detail</a>
+                </td>
+                <td>
+                    {% if ride.status == 1 %}
+                    <form method="POST" action="{% url 'basic:ride_delete'%}">
+                        {% csrf_token %}
+                        <input type="number" name="ride_id" value={{ ride.id }} hidden>
+                        <button type="submit" class="btn btn-outline-danger">Cancel</button>
+                    </form>
+                    {% else %}
+                    <button type="button" class="btn btn-outline-danger" disabled>Cancel</button>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
