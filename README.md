@@ -1,4 +1,4 @@
-# Web-App-Ride-Sharing-Service
+# Ride&Sharing Web App
 This GitHub repository contains a course project that is a web application built using the Django framework. The purpose of the web application is to allow users to request, join, and drive for rides. The application includes a user authentication system and a user-friendly interface for managing ride requests and joining ride groups. The repository includes the source code for the web application, along with any necessary configuration files and build scripts. The use of Django allows for rapid development of the application, with features such as the ORM, built-in admin interface, and URL routing. 
 ### Run
 ```
